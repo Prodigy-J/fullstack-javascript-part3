@@ -1,6 +1,7 @@
 const express = require("express");
 
 const app = express();
+app.use(express.json());
 
 let persons = [
   {
@@ -27,6 +28,27 @@ let persons = [
 
 app.get("/api/persons", (request, response) => {
   return response.json(persons);
+});
+
+app.post("/api/persons", (request, response) => {
+  const id = Math.floor(Math.random() * 2442);
+  const person = request.body;
+
+  person.id = id;
+
+  if (!person.name || !person.number) {
+    return response.status(400).json({ error: "name or number is missing" });
+  }
+
+  const nameFound = persons.find((p) => p.name === person.name);
+
+  if (nameFound) {
+    return response.status(400).json({ error: "contact already exists" });
+  }
+
+  persons = persons.concat(person);
+
+  response.json(person);
 });
 
 app.get("/info", (request, response) => {
