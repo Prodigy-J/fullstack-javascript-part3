@@ -12,15 +12,6 @@ morgan.token("body", function (req, res) {
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
-// app.use(
-//   morgan(function (tokens, request, response) {
-//     return [
-//       tokens.method,
-//       tokens.path,
-//       tokens.status
-//     ].join(" ");
-//   })
-// );
 
 let persons = [
   {
