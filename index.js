@@ -27,11 +27,11 @@ app.post("/api/persons", (request, response) => {
   const person = request.body;
 
   if (!person.name || !person.number) {
-    return response.status(400).json({ error: "name or number is missing" });
+    response.status(400).json({ error: "name or number is missing" });
   }
 
   Person.findOne({ name: person.name }).then((response) => {
-    return response.status(400).json({ error: "contact already exists" });
+    response.status(400).json({ error: "contact already exists" });
   });
 
   const newContact = new Person({
