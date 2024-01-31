@@ -17,29 +17,6 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
 
-let persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
-
 app.get("/api/persons", (request, response) => {
   Person.find({}).then((persons) => {
     response.json(persons);
@@ -47,24 +24,24 @@ app.get("/api/persons", (request, response) => {
 });
 
 app.post("/api/persons", (request, response) => {
-  const id = Math.floor(Math.random() * 2442);
   const person = request.body;
-
-  person.id = id;
 
   if (!person.name || !person.number) {
     return response.status(400).json({ error: "name or number is missing" });
   }
 
-  const nameFound = persons.find((p) => p.name === person.name);
-
-  if (nameFound) {
+  Person.findOne({ name: person.name }).then((response) => {
     return response.status(400).json({ error: "contact already exists" });
-  }
+  });
 
-  persons = persons.concat(person);
+  const newContact = new Person({
+    name: person.name,
+    number: person.number,
+  });
 
-  response.json(person);
+  newContact.save().then((person) => {
+    response.json(person);
+  });
 });
 
 app.get("/info", (request, response) => {
