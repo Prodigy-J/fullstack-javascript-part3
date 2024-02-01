@@ -30,17 +30,19 @@ app.post("/api/persons", (request, response) => {
     response.status(400).json({ error: "name or number is missing" });
   }
 
-  Person.findOne({ name: person.name }).then((response) => {
-    response.status(400).json({ error: "contact already exists" });
-  });
+  Person.exists({ name: person.name }).then((result) => {
+    if (result === null) {
+      const newContact = new Person({
+        name: person.name,
+        number: person.number,
+      });
 
-  const newContact = new Person({
-    name: person.name,
-    number: person.number,
-  });
-
-  newContact.save().then((person) => {
-    response.json(person);
+      newContact.save().then((person) => {
+        response.json(person);
+      });
+    } else {
+      response.status(400).json({ error: "contact already exists" });
+    }
   });
 });
 
