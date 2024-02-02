@@ -57,22 +57,25 @@ app.get("/info", (request, response) => {
 });
 
 app.get("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  const person = persons.find((person) => person.id === id);
-
-  if (!person) {
-    return response.status(404).end();
-  }
-
-  return response.json(person);
+  const person = Person.findById(request.params.id)
+    .then((person) => {
+      if (!person) response.status(404).end();
+      else response.json(person);
+    })
+    .catch((error) => {
+      console.log(error);
+      response.json({ error: "there was an error processing the request" });
+    });
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-
-  persons = persons.filter((person) => person.id !== id);
-
-  return response.status(204).end();
+  Person.findByIdAndDelete(request.params.id)
+    .then((person) => {
+      response.status(204).end();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
 
 const PORT = process.env.PORT;
