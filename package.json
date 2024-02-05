@@ -8,7 +8,8 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf dist && cd ../fullstack-javascript/part2/phonebook && npm run build && cp -r dist ../../../fullstack-javascript-part3/",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "lint": "eslint ."
   },
   "author": "Jerome N. Tokpa",
   "license": "ISC",
@@ -18,5 +19,8 @@
     "express": "^4.18.2",
     "mongoose": "^8.1.1",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0"
   }
 }
